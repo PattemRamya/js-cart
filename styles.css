@@ -1,0 +1,23 @@
+a {
+    padding: 2px;
+  }
+  
+  a:hover {
+    color: white;
+    border: 1px solid rgba(255, 255, 0, 0.349);
+    border-radius: 5px;
+  }
+  .nav {
+    flex-wrap: nowrap;
+  }
+  .navbar {
+    flex-wrap: nowrap;
+  }
+  #main {
+    display: flex;
+    flex-wrap: nowrap;
+  }
+  .show-cart li {
+    display: flex;
+  }
+  

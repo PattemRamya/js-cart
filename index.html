@@ -35,7 +35,6 @@
               alt="logo image"
               width="90"
               height="40"
-              
             />
           </a>
           <a
@@ -74,6 +73,7 @@
             <a
               class="nav-link active"
               onclick="displayCart()"
+              href="cart.html"
               style="color: orange"
               ><img src="assets/cart.jpg" width="50" height="40" /><span
                 id="cart"
@@ -138,9 +138,11 @@
       </div>
     </nav>
     <section id="display-items"></section>
-    <section id="display-cart"></section>
 
     <script src="data.js"></script>
     <script src="script.js"></script>
+    <script>
+      displayProducts();
+    </script>
   </body>
 </html>

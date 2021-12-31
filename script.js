@@ -1,4 +1,3 @@
-let productElements = document.getElementById("display-items");
 const cart_key = "cart_items";
 
 console.log(window.location.href);
@@ -6,25 +5,26 @@ console.log(window.location.href);
 // To clear session storage on page refresh
 // Store current page ref on sessionStorage
 window.onbeforeunload = function () {
-    sessionStorage.setItem("origin", window.location.href);
+  sessionStorage.setItem("origin", window.location.href);
 }
 
 // clear sessionStorage if page ref in sessionStorage is same after page load
 window.onload = function () {
-    if (window.location.href == sessionStorage.getItem("origin")) {
-        sessionStorage.clear();
-    }
+  if (window.location.href == sessionStorage.getItem("origin")) {
+    sessionStorage.clear();
+  }
 }
 
 function displayProducts() {
-    let productsSubArrays = chunck(products, 3);
+  let productsSection = document.getElementById("display-items");
+  let productsSubArrays = chunck(products, 3);
 
-    productsSubArrays.forEach((products) => {
-        let section = `
+  productsSubArrays.forEach((products) => {
+    let section = `
             <div class="container">
             <div class="row">`;
-        products.forEach((product) => {
-            section += `
+    products.forEach((product) => {
+      section += `
       <div class="col-4 gx-4 gy-3">
         <div class="card h-100 p-4 rounded">
           <img
@@ -70,10 +70,10 @@ function displayProducts() {
             <div class="modal-body">
               <h5><strong>About this item</strong></h5>
               <ul>`;
-            product.specifications.forEach((spec) => {
-                section += `<li> ${spec} </li>`;
-            });
-            section += `</ul>
+      product.specifications.forEach((spec) => {
+        section += `<li> ${spec} </li>`;
+      });
+      section += `</ul>
               <table>
                 <tr>
                   <td>
@@ -91,68 +91,68 @@ function displayProducts() {
                 Add to cart
               </button>
 
-              <button type="button" class="btn btn-primary" onclick="displayCart()">View cart</button>
+              <button type="button" class="btn btn-primary" onclick="window.location.href='cart.html'">View cart</button>
             </div>
           </div>
         </div>
       </div>
     </div>`;
-        });
-        section += `</div></div>`;
-        productElements.innerHTML += section;
     });
+    section += `</div></div>`;
+    productsSection.innerHTML += section;
+  });
 }
-displayProducts();
+
 
 // function creates and returns an array of subarray with given size
 function chunck(array, size) {
-    const productsSubArrays = [];
-    let index = 0;
-    while (index < array.length) {
-        productsSubArrays.push(array.slice(index, size + index));
-        index += size;
-    }
-    return productsSubArrays;
+  const productsSubArrays = [];
+  let index = 0;
+  while (index < array.length) {
+    productsSubArrays.push(array.slice(index, size + index));
+    index += size;
+  }
+  return productsSubArrays;
 }
 
 function addToCart(id) {
-    let items = getCartItems();
+  let items = getCartItems();
 
-    let cart_item = products.find(e => e.id === id);
-    cart_item['quantity'] = 1;
-    console.log("Add cart", cart_item);
+  let cart_item = products.find(e => e.id === id);
+  cart_item['quantity'] = 1;
+  console.log("Add cart", cart_item);
 
-    let duplicate_item = items.filter(e => e.id === id);
+  let duplicate_item = items.filter(e => e.id === id);
 
-    console.log(duplicate_item);
+  console.log(duplicate_item);
 
-    if (duplicate_item.length === 0) {
-        items.push(cart_item);
+  if (duplicate_item.length === 0) {
+    items.push(cart_item);
 
-        sessionStorage.setItem(cart_key, JSON.stringify(items))
-        console.log("Cart Items array", JSON.stringify(items));
-        document.getElementById("product_added" + id).classList.remove("d-none");
-        document.getElementById("cart").textContent = items.length;
-        displayCart();
-    } else {
-        alert('Item is already available in cart');
-    }
+    sessionStorage.setItem(cart_key, JSON.stringify(items))
+    console.log("Cart Items array", JSON.stringify(items));
+    document.getElementById("product_added" + id).classList.remove("d-none");
+    refreshCartCountBadge();
+    // displayCart();
+  } else {
+    alert('Item is already available in cart');
+  }
 
 }
 
 
 
 function displayCart() {
-    console.log("display cart");
-    let cartElements = document.getElementById("display-cart");
-    let section = `
+  console.log("display cart");
+  let cartElements = document.getElementById("display-cart");
+  let section = `
       <div class="container table_margin" style="background-color: white">
       <br> 
       <h3>Shopping Cart</h3>
       <hr>`;
-    let items = getCartItems();
-    items.forEach((cart) => {
-        section += `
+  let items = getCartItems();
+  items.forEach((cart) => {
+    section += `
         <div class="row gy-3">
           <div class="col image-col">
             <img src="${cart.imagesrc}" width=350 height=150>
@@ -193,54 +193,59 @@ function displayCart() {
           </div>
         </div>
       `;
-    });
-    section += `<hr><div class="h5">Total price: <span id='total_price'></span></div>
+  });
+  section += `<hr><div class="h5">Total price: <span id='total_price'></span></div>
     </div>`;
-    cartElements.innerHTML = section;
-    calcTotalPrice();
+  cartElements.innerHTML = section;
+  calcTotalPrice();
 }
 
 function updatePrice(qty_value, id) {
-    console.log("price", id);
-    console.log("Qty", qty_value);
+  console.log("price", id);
+  console.log("Qty", qty_value);
 
-    let items = getCartItems();
-    let itemIndex = items.findIndex(e => e.id === id);
+  let items = getCartItems();
+  let itemIndex = items.findIndex(e => e.id === id);
 
-    items[itemIndex].quantity = qty_value;
+  items[itemIndex].quantity = qty_value;
 
-    let price = items[itemIndex].price.replaceAll(',', '');
-    price = Number(price) * Number(qty_value);
-    document.getElementById("price-" + id).innerText = '₹' + price;
-    sessionStorage.setItem(cart_key, JSON.stringify(items));
-    calcTotalPrice();
+  let price = items[itemIndex].price.replaceAll(',', '');
+  price = Number(price) * Number(qty_value);
+  document.getElementById("price-" + id).innerText = '₹' + price;
+  sessionStorage.setItem(cart_key, JSON.stringify(items));
+  calcTotalPrice();
 
 }
 
 function deleteItem(id) {
-    console.log("Delete Item triggered");
+  console.log("Delete Item triggered");
 
-    let items = getCartItems();
+  let items = getCartItems();
 
-    let updated_items = items.filter(e => e.id !== id);
+  let updated_items = items.filter(e => e.id !== id);
 
-    sessionStorage.setItem(cart_key, JSON.stringify(updated_items));
-    document.getElementById("cart").textContent = updated_items.length;
-    displayCart();
-    calcTotalPrice();
+  sessionStorage.setItem(cart_key, JSON.stringify(updated_items));
+  refreshCartCountBadge();
+  displayCart();
+  calcTotalPrice();
 }
 
 function calcTotalPrice() {
-    console.log('calcTotalPrice');
-    let items = getCartItems();
-    let totalSum = 0;
-    items.forEach(item => {
-        totalSum += Number(item.price.replaceAll(',', '')) * Number(item.quantity);
-    });
-    document.getElementById('total_price').textContent = '₹' + totalSum;
+  console.log('calcTotalPrice');
+  let items = getCartItems();
+  let totalSum = 0;
+  items.forEach(item => {
+    totalSum += Number(item.price.replaceAll(',', '')) * Number(item.quantity);
+  });
+  document.getElementById('total_price').textContent = '₹' + totalSum;
 }
 
 function getCartItems() {
-    return sessionStorage.getItem(cart_key) === null ? [] : JSON.parse(sessionStorage.getItem(cart_key));
+  return sessionStorage.getItem(cart_key) === null ? [] : JSON.parse(sessionStorage.getItem(cart_key));
 
+}
+
+function refreshCartCountBadge() {
+  let items = getCartItems();
+  document.getElementById("cart").textContent = items.length;
 }

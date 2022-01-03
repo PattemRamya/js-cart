@@ -1,6 +1,3 @@
-
-console.log(window.location.href);
-
 // Store current page ref on localStorage
 window.onbeforeunload = function () {
   localStorage.setItem("origin", window.location.href);
@@ -13,9 +10,7 @@ window.onload = function () {
   }
 }
 
-
 //function to display products in home page
-
 function displayProducts() {
   let productsSection = document.getElementById("display-items");
   let productsSubArrays = chunck(products, 3); // to make subarray for displaying 3 items in a row 
@@ -105,7 +100,6 @@ function displayProducts() {
 }
 
 // function creates and returns an array of subarray with given size
-
 function chunck(array, size) {
   const productsSubArrays = [];
   let index = 0;
@@ -119,7 +113,6 @@ function chunck(array, size) {
 const cart_key = "cart_items";
 
 // function to add items in cart 
-
 function addToCart(id) {
   let items = getCartItems();
   let cart_item = products.find(e => e.id === id);
@@ -144,7 +137,6 @@ function addToCart(id) {
 }
 
 // function to display added items in cart page
-
 function displayCart() {
   console.log("display cart");
   let cartSection = document.getElementById("display-cart");
@@ -174,13 +166,13 @@ function displayCart() {
             <table class="mt-2">
               <tr >
                 <td style="padding-right:10px;">
-                  <select class="form-select" id="qty-${cart.id}" onchange="updatePrice(this.value, ${cart.id})" > 
-                      <option value="1">1</option>
+                  <select class="form-select" id="qty_select_${cart.id}" onchange="updatePrice(this.value, ${cart.id})"> 
+                      <option value="1" >1</option>
                       <option value="2">2</option>
                       <option value="3">3</option>
                       <option value="4">4</option>
                       <option value="5">5</option>
-                    </select>
+                  </select>
                 </td>
                 <td style="padding-right:10px;">
                   <button class="btn btn-outline-danger" onclick="deleteItem(${cart.id})" style="color:black; ">Delete</button>
@@ -204,63 +196,62 @@ function displayCart() {
 }
 
 // function to maintain updated price in cart page
-
 function updatePrice(qty_value, id) {
-  console.log("price", id);
-  console.log("Qty", qty_value);
-
+  console.log('Update Price');
   let items = getCartItems();
   let itemIndex = items.findIndex(e => e.id === id);
 
   items[itemIndex].quantity = qty_value;
 
-  let price = items[itemIndex].price.replaceAll(',', '');
+  let price = items[itemIndex].price;
   price = Number(price) * Number(qty_value);
   document.getElementById("price-" + id).innerText = '₹' + price;
+  console.log(items);
   localStorage.setItem(cart_key, JSON.stringify(items));
   calcTotalPrice();
-
 }
-// function to delete items in cart page
 
+// function to delete items in cart page
 function deleteItem(id) {
   console.log("Delete Item triggered");
-
   let items = getCartItems();
-
   let updated_items = items.filter(e => e.id !== id);
 
   localStorage.setItem(cart_key, JSON.stringify(updated_items));
   calcTotalPrice();
   displayCart();
   refreshCartCountBadge();
-
-
+  updateQty();
 }
 
 // function to calculate overall amount after all items added in cart
-
 function calcTotalPrice() {
   console.log('calcTotalPrice');
   let items = getCartItems();
   let totalSum = 0;
   items.forEach(item => {
-    totalSum += Number(item.price.replaceAll(',', '')) * Number(item.quantity);
+    totalSum += Number(item.price) * Number(item.quantity);
   });
   document.getElementById('total_price').textContent = '₹' + totalSum;
 }
 
-// function to get items from local storage 
-
+// function returns stored cart_items from LocalStorage
 function getCartItems() {
   return localStorage.getItem(cart_key) === null ? [] : JSON.parse(localStorage.getItem(cart_key));
-
 }
-
-//function to update badge count when item increased or decreased in cart
 
 function refreshCartCountBadge() {
   let items = getCartItems();
   document.getElementById("cart").innerText = items.length;
+}
+// to update qty in selected item
+function updateQty() {
+  console.log("In updateQty");
+  let items = getCartItems();
+  items.forEach(e => {
+    let qtyElement = document.getElementById("qty_select_" + e.id);
+    console.log("QtyElement ", qtyElement);
+    qtyElement.value = e.quantity;
+  });
 }
 

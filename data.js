@@ -4,7 +4,7 @@ const products = [
         imagesrc: "assets/card1.jpg",
         description:
             "Lenovo Tab M10 HD 2nd Gen (25.65 cm (10.1 inch), 2 GB, 32 GB,Wi-Fi) with Metallic Body and Octa core Processor",
-        price: "11,294.00",
+        price: 11294,
         currency: "₹",
         specifications: [
             '10.1" HD (1280x800) display with TDDI technology and 400 nits brightness and TUV Rhienland certified eye protection',
@@ -19,7 +19,7 @@ const products = [
         imagesrc: "assets/card2.jpg",
         description:
             "Lenovo Tab M10 FHD Plus Tablet (26.16 cm (10.3-inch), 4GB,128GB, Wi-Fi + LTE, Volte Calling), Platinum Grey",
-        price: "18,990.00",
+        price: 18990,
         currency: "₹",
         specifications: [
             "8MP AF rear camera | 5MP front camera",
@@ -36,7 +36,7 @@ const products = [
         imagesrc: "assets/card3.jpg",
         description:
             "Lenovo Yoga Smart Tablet with The Google Assistant 25.65 cm (10.1 inch, 4GB, 64GB, WiFi + 4G LTE), Iron Grey",
-        price: "19,999.00",
+        price: 19999,
         currency: "₹",
         specifications: [
             "8MP AF rear camera | 5MP front camera",
@@ -52,7 +52,7 @@ const products = [
         imagesrc: "assets/card4.jpg",
         description:
             "Lenovo Tab M8 HD 2nd Gen (8 inch, 3GB, 32 GB, Wi-Fi+LTE), Iron Grey",
-        price: "10,890.00",
+        price: 10890,
         currency: "₹",
         specifications: [
             " 11 inch TDDI IPS display with 2000*1200 resolution and 400 nits brightness and eye care mode with TUV certification",
@@ -67,7 +67,7 @@ const products = [
         imagesrc: "assets/card5.jpg",
         description:
             "Lenovo Tab M7 3rd Gen (7 inch, 2 GB, 32 GB, Wi-fi Only), Iron Grey",
-        price: "7,999.00",
+        price: 7999,
         currency: "₹",
         specifications: [
             "8 inch IPS display",
@@ -82,7 +82,7 @@ const products = [
         imagesrc: "assets/card6.jpg",
         description:
             "Lenovo Tab M10 HD Tablet (10.1 inch, 2GB, 32GB, Wi-Fi Only) Slate Black",
-        price: "10,449.00",
+        price: 10449,
         currency: "₹",
         specifications: [
             "7 inch HD display",

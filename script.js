@@ -1,23 +1,24 @@
-const cart_key = "cart_items";
 
 console.log(window.location.href);
 
-// To clear session storage on page refresh
-// Store current page ref on sessionStorage
+// Store current page ref on localStorage
 window.onbeforeunload = function () {
-  sessionStorage.setItem("origin", window.location.href);
+  localStorage.setItem("origin", window.location.href);
 }
 
-// clear sessionStorage if page ref in sessionStorage is same after page load
+// clear localStorage if page ref in localStorage is same after page load
 window.onload = function () {
-  if (window.location.href == sessionStorage.getItem("origin")) {
-    sessionStorage.clear();
+  if (window.location.href == localStorage.getItem("origin")) {
+    localStorage.clear();
   }
 }
 
+
+//function to display products in home page
+
 function displayProducts() {
   let productsSection = document.getElementById("display-items");
-  let productsSubArrays = chunck(products, 3);
+  let productsSubArrays = chunck(products, 3); // to make subarray for displaying 3 items in a row 
 
   productsSubArrays.forEach((products) => {
     let section = `
@@ -32,7 +33,7 @@ function displayProducts() {
             src="${product.imagesrc}"
             alt="Tablet Image"
           />
-          <div class="card-block">
+          <div class="card-body">
             <div>
               <h5 class="card-title">${product.description}</h5>
             </div>
@@ -70,8 +71,8 @@ function displayProducts() {
             <div class="modal-body">
               <h5><strong>About this item</strong></h5>
               <ul>`;
-      product.specifications.forEach((spec) => {
-        section += `<li> ${spec} </li>`;
+      product.specifications.forEach((specification) => {   //to iterate specifications in subarray
+        section += `<li> ${specification} </li>`;
       });
       section += `</ul>
               <table>
@@ -103,8 +104,8 @@ function displayProducts() {
   });
 }
 
-
 // function creates and returns an array of subarray with given size
+
 function chunck(array, size) {
   const productsSubArrays = [];
   let index = 0;
@@ -115,43 +116,45 @@ function chunck(array, size) {
   return productsSubArrays;
 }
 
+const cart_key = "cart_items";
+
+// function to add items in cart 
+
 function addToCart(id) {
   let items = getCartItems();
-
   let cart_item = products.find(e => e.id === id);
   cart_item['quantity'] = 1;
   console.log("Add cart", cart_item);
 
-  let duplicate_item = items.filter(e => e.id === id);
+  let duplicate_item = items.filter(e => e.id === id);// to remove duplicate items 
 
   console.log(duplicate_item);
 
   if (duplicate_item.length === 0) {
     items.push(cart_item);
-
-    sessionStorage.setItem(cart_key, JSON.stringify(items))
+    localStorage.setItem(cart_key, JSON.stringify(items))
     console.log("Cart Items array", JSON.stringify(items));
-    document.getElementById("product_added" + id).classList.remove("d-none");
-    refreshCartCountBadge();
-    // displayCart();
-  } else {
-    alert('Item is already available in cart');
+    document.getElementById("product_added" + id).classList.remove("d-none");//to display product added message in modal
+    refreshCartCountBadge();          //updating item number in cart 
+  }
+  else {
+    alert('Item is already available in cart'); //if item already present in cart, showing message as exists in cart 
   }
 
 }
 
-
+// function to display added items in cart page
 
 function displayCart() {
   console.log("display cart");
-  let cartElements = document.getElementById("display-cart");
+  let cartSection = document.getElementById("display-cart");
   let section = `
       <div class="container table_margin" style="background-color: white">
       <br> 
       <h3>Shopping Cart</h3>
       <hr>`;
   let items = getCartItems();
-  items.forEach((cart) => {
+  items.forEach((cart) => {       // iterating items present in local storage and displaying
     section += `
         <div class="row gy-3">
           <div class="col image-col">
@@ -169,21 +172,21 @@ function displayCart() {
               <strong>Pattern name:</strong> Tablet </a>
             <br>
             <table class="mt-2">
-              <tr>
-                <td>
-                  <select class="form-select" id="qty-${cart.id}" onchange="updatePrice(this.value, ${cart.id})">
-                      <option value="1" selected>1</option>
+              <tr >
+                <td style="padding-right:10px;">
+                  <select class="form-select" id="qty-${cart.id}" onchange="updatePrice(this.value, ${cart.id})" > 
+                      <option value="1">1</option>
                       <option value="2">2</option>
                       <option value="3">3</option>
                       <option value="4">4</option>
                       <option value="5">5</option>
                     </select>
                 </td>
-                <td>
+                <td style="padding-right:10px;">
                   <button class="btn btn-outline-danger" onclick="deleteItem(${cart.id})" style="color:black; ">Delete</button>
                 </td>
                 <td>
-                  <button class="btn btn-outline-info" href="#" style="color:black;">See more like this</button>
+                  <button class="btn btn-outline-info" onclick="window.location.href='index.html'" style="color:black;">See more like this</button>
                 </td>
               </tr>
             </table>
@@ -196,9 +199,11 @@ function displayCart() {
   });
   section += `<hr><div class="h5">Total price: <span id='total_price'></span></div>
     </div>`;
-  cartElements.innerHTML = section;
+  cartSection.innerHTML = section;
   calcTotalPrice();
 }
+
+// function to maintain updated price in cart page
 
 function updatePrice(qty_value, id) {
   console.log("price", id);
@@ -212,10 +217,11 @@ function updatePrice(qty_value, id) {
   let price = items[itemIndex].price.replaceAll(',', '');
   price = Number(price) * Number(qty_value);
   document.getElementById("price-" + id).innerText = '₹' + price;
-  sessionStorage.setItem(cart_key, JSON.stringify(items));
+  localStorage.setItem(cart_key, JSON.stringify(items));
   calcTotalPrice();
 
 }
+// function to delete items in cart page
 
 function deleteItem(id) {
   console.log("Delete Item triggered");
@@ -224,11 +230,15 @@ function deleteItem(id) {
 
   let updated_items = items.filter(e => e.id !== id);
 
-  sessionStorage.setItem(cart_key, JSON.stringify(updated_items));
-  refreshCartCountBadge();
-  displayCart();
+  localStorage.setItem(cart_key, JSON.stringify(updated_items));
   calcTotalPrice();
+  displayCart();
+  refreshCartCountBadge();
+
+
 }
+
+// function to calculate overall amount after all items added in cart
 
 function calcTotalPrice() {
   console.log('calcTotalPrice');
@@ -240,12 +250,17 @@ function calcTotalPrice() {
   document.getElementById('total_price').textContent = '₹' + totalSum;
 }
 
+// function to get items from local storage 
+
 function getCartItems() {
-  return sessionStorage.getItem(cart_key) === null ? [] : JSON.parse(sessionStorage.getItem(cart_key));
+  return localStorage.getItem(cart_key) === null ? [] : JSON.parse(localStorage.getItem(cart_key));
 
 }
+
+//function to update badge count when item increased or decreased in cart
 
 function refreshCartCountBadge() {
   let items = getCartItems();
-  document.getElementById("cart").textContent = items.length;
+  document.getElementById("cart").innerText = items.length;
 }
+

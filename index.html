@@ -70,11 +70,7 @@
               style="color: white; font-weight: bold"
               >Returns & Orders</a
             >
-            <a
-              class="nav-link active"
-              onclick="displayCart()"
-              href="cart.html"
-              style="color: orange"
+            <a class="nav-link active" href="cart.html" style="color: orange"
               ><img src="assets/cart.jpg" width="50" height="40" /><span
                 id="cart"
                 class="badge bg-danger text-light"
@@ -143,6 +139,7 @@
     <script src="script.js"></script>
     <script>
       displayProducts();
+      refreshCartCountBadge();
     </script>
   </body>
 </html>

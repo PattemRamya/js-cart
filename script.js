@@ -118,11 +118,8 @@ function addToCart(id) {
   let cart_item = products.find(e => e.id === id);
   cart_item['quantity'] = 1;
   console.log("Add cart", cart_item);
-
   let duplicate_item = items.filter(e => e.id === id);// to remove duplicate items 
-
   console.log(duplicate_item);
-
   if (duplicate_item.length === 0) {
     items.push(cart_item);
     localStorage.setItem(cart_key, JSON.stringify(items))
@@ -200,7 +197,7 @@ function updatePrice(qty_value, id) {
   console.log('Update Price');
   let items = getCartItems();
   let itemIndex = items.findIndex(e => e.id === id);
-
+  console.log(itemIndex);
   items[itemIndex].quantity = qty_value;
 
   let price = items[itemIndex].price;
@@ -250,8 +247,9 @@ function updateQty() {
   let items = getCartItems();
   items.forEach(e => {
     let qtyElement = document.getElementById("qty_select_" + e.id);
-    console.log("QtyElement ", qtyElement);
+    console.log("QtyElement ", qtyElement.value, e.id);
     qtyElement.value = e.quantity;
+    updatePrice(e.quantity, e.id);
   });
 }
 

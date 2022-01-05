@@ -18,7 +18,7 @@ function displayProducts() {
             <div class="row">`;
   products.forEach((product) => {
     section += `
-      <div class="col-4 gx-4 gy-3">
+      <div class="col-lg-4 col-sm-12 col-md-6 gx-4 gy-3">
         <div class="card h-100 p-4 rounded">
           <img
             class="card-img-top h-50 w-50 d-block mx-auto pb-3"
@@ -55,7 +55,7 @@ function displayProducts() {
               <button
                 type="button"
                 class="close"
-                data-dismiss="modal"
+                data-dismiss="modal" style="background:none"
               >&times;
                 
               </button>
@@ -97,13 +97,12 @@ function displayProducts() {
 }
 
 
-const cart_key = 0;
+const cart_key = "cart-items";
 
 // function to add items in cart 
 function addToCart(id) {
   let items = getCartItems();
   let cart_item = products.find(e => e.id === id);
-  console.log("cartitem", cart_item);
   cart_item['quantity'] = 1;
   console.log("Add cart", cart_item);
   let duplicate_item = items.filter(e => e.id === id);// to remove duplicate items 
@@ -126,14 +125,14 @@ function displayCart() {
   console.log("display cart");
   let cartSection = document.getElementById("display-cart");
   let section = `
-      <div class="container table_margin" style="background-color: white">
+      <div class="container" style="background-color: white">
       <br> 
       <h3>Shopping Cart</h3>
       <hr>`;
   let items = getCartItems();
   items.forEach((cart) => {       // iterating items present in local storage and displaying
     section += `
-        <div class="row gy-3">
+        <div class="row gy-3 pb-5">
           <div class="col image-col">
             <img src="${cart.imagesrc}" width=350 height=150>
           </div>
@@ -174,7 +173,9 @@ function displayCart() {
         </div>
       `;
   });
-  section += `<hr><div class="h5">Total price: <span id='total_price'></span></div>
+  section += `<hr>
+      <div class="h5">Total price: <span id='total_price'></span>
+      </div>
     </div>`;
   cartSection.innerHTML = section;
   calcTotalPrice();

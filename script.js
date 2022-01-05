@@ -13,14 +13,11 @@ window.onload = function () {
 //function to display products in home page
 function displayProducts() {
   let productsSection = document.getElementById("display-items");
-  let productsSubArrays = chunck(products, 3); // to make subarray for displaying 3 items in a row 
-
-  productsSubArrays.forEach((products) => {
-    let section = `
+  let section = `
             <div class="container">
             <div class="row">`;
-    products.forEach((product) => {
-      section += `
+  products.forEach((product) => {
+    section += `
       <div class="col-4 gx-4 gy-3">
         <div class="card h-100 p-4 rounded">
           <img
@@ -66,10 +63,10 @@ function displayProducts() {
             <div class="modal-body">
               <h5><strong>About this item</strong></h5>
               <ul>`;
-      product.specifications.forEach((specification) => {   //to iterate specifications in subarray
-        section += `<li> ${specification} </li>`;
-      });
-      section += `</ul>
+    product.specifications.forEach((specification) => {   //to iterate specifications in subarray
+      section += `<li> ${specification} </li>`;
+    });
+    section += `</ul>
               <table>
                 <tr>
                   <td>
@@ -93,29 +90,20 @@ function displayProducts() {
         </div>
       </div>
     </div>`;
-    });
-    section += `</div></div>`;
-    productsSection.innerHTML += section;
   });
+  section += `</div></div>`;
+  productsSection.innerHTML += section;
+
 }
 
-// function creates and returns an array of subarray with given size
-function chunck(array, size) {
-  const productsSubArrays = [];
-  let index = 0;
-  while (index < array.length) {
-    productsSubArrays.push(array.slice(index, size + index));
-    index += size;
-  }
-  return productsSubArrays;
-}
 
-const cart_key = "cart_items";
+const cart_key = 0;
 
 // function to add items in cart 
 function addToCart(id) {
   let items = getCartItems();
   let cart_item = products.find(e => e.id === id);
+  console.log("cartitem", cart_item);
   cart_item['quantity'] = 1;
   console.log("Add cart", cart_item);
   let duplicate_item = items.filter(e => e.id === id);// to remove duplicate items 
